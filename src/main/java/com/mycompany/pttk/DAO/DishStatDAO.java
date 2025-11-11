@@ -18,7 +18,9 @@ import java.sql.SQLException;
 
 public class DishStatDAO extends DAO {
     
-    public DishStatDAO(){}
+    public DishStatDAO(){
+        super();
+    }
     
     public ArrayList<DishStat> getDishRevenueStatisticsByDate(Date startDate, Date endDate){
         ArrayList<DishStat> listStat = new ArrayList<>();
@@ -42,8 +44,8 @@ public class DishStatDAO extends DAO {
                     "    t1.id\n" +
                     "ORDER BY\n" +
                     "    total DESC;";
-        
-        try(Connection con = getConnection();PreparedStatement ps = con.prepareStatement(sql);) {
+        Connection con = this.con;
+        try(PreparedStatement ps = con.prepareStatement(sql);) {
             
             ps.setDate(1, new java.sql.Date(startDate.getTime()));
             ps.setDate(2, new java.sql.Date(endDate.getTime())); 

@@ -18,13 +18,15 @@ import java.util.*;
  */
 public class DishDAO extends DAO {
     public DishDAO() {
+        super();
     }
     
     public Dish getDishById(int id){
         Dish dish = new Dish();
         String sql = "SELECT * FROM restman.tbldish WHERE id = ? LIMIT 1;";
+        Connection con = this.con;
         
-        try (Connection con = getConnection();PreparedStatement ps = con.prepareStatement(sql);) {
+        try (PreparedStatement ps = con.prepareStatement(sql);) {
             
             ps.setInt(1, id);
             
@@ -53,8 +55,8 @@ public class DishDAO extends DAO {
         ArrayList<Dish> searchResult = new ArrayList<>();
         
         String sql = "SELECT * FROM restman.tbldish WHERE name LIKE ?";
-        
-        try (Connection con = getConnection();PreparedStatement ps = con.prepareStatement(sql);) {
+        Connection con = this.con;
+        try (PreparedStatement ps = con.prepareStatement(sql);) {
             
             ps.setString(1, "%" + keyword + "%");
             

@@ -20,6 +20,7 @@ import java.util.Date;
 public class OrderedDishDAO extends DAO{
 
     public OrderedDishDAO() {
+        super();
     }
     
     public ArrayList<OrderedDish> getDishOrderHistoryByDateAndId(Date startDate, Date endDate, int id){
@@ -29,8 +30,8 @@ public class OrderedDishDAO extends DAO{
         String sql = "select id, quantity, date \n" +
                         "from restman.tblordereddish\n" +
                         "where tblDishId = ? and date between ? and ?;\n";
-        
-        try( Connection con = getConnection();PreparedStatement ps = con.prepareStatement(sql);) {
+        Connection con = this.con;
+        try( PreparedStatement ps = con.prepareStatement(sql);) {
             System.out.println("calling");
             resp = new ArrayList<>();
             ps.setInt(1, id);

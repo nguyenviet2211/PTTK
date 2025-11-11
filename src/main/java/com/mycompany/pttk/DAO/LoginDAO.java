@@ -19,8 +19,8 @@ public class LoginDAO extends DAO{
     public String validate(String username, String password) throws Exception{
         String sql = "SELECT * FROM restman.tblmember WHERE username = ? AND password = ?";
         
-        
-        try (     Connection con = getConnection();PreparedStatement ps = con.prepareStatement(sql);){
+        Connection con = this.con;
+        try (PreparedStatement ps = con.prepareStatement(sql);){
             ps.setString(1, username);
             ps.setString(2, password);
             

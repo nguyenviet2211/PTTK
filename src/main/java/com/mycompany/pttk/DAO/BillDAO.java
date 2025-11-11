@@ -17,15 +17,15 @@ import java.util.*;
  */
 public class BillDAO extends DAO {
     public BillDAO(){
-        
+        super();
     }
     
     public Bill getBillById(int OrderedDishId){
         Bill b = new Bill();
         
         String sql = "select * from restman.tblbill where id = (select tblBillId from restman.tblordereddish where id = ? limit 1);";
-      
-        try(Connection con = getConnection();){
+        Connection con = this.con;
+        try{
             PreparedStatement ps = con.prepareStatement(sql);
             
             ps.setInt(1, OrderedDishId);

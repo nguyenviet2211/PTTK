@@ -13,13 +13,9 @@ import java.sql.SQLException;
  * @author viet5
  */
 public class DAO {
-    private Connection con;
+    protected Connection con;
     
     public DAO() { 
-        
-    }
-
-    public Connection getConnection() {
         String driver = "com.mysql.cj.jdbc.Driver"; 
             String url = "jdbc:mysql://localhost:3307/restman"; 
             String user = "root"; 
@@ -28,9 +24,8 @@ public class DAO {
             try {
                 Class.forName(driver);
 
-                Connection con = DriverManager.getConnection(url, user, password);
+                con = DriverManager.getConnection(url, user, password);
                 System.out.println("Database connect Success!");
-                return con;
             } catch (ClassNotFoundException e) {
                 System.err.println("Driver JDBC not found: " + driver);
                 e.printStackTrace();
@@ -38,6 +33,6 @@ public class DAO {
                 System.err.println("Error!");
                 e.printStackTrace();
             }
-            return null;
+        
     }
 }
