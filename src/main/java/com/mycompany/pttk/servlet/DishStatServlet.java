@@ -49,7 +49,32 @@ public class DishStatServlet extends HttpServlet {
         try {
             switch (action) {
                 case "getRevenueStat":
-                    getRevenueStat(request, response);
+                    String startDateStr = request.getParameter("startDate");
+                    String endDateStr = request.getParameter("endDate");
+
+                    System.out.println(startDateStr + " " + endDateStr);
+
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    Date StartDate = null;
+                    Date EndDate = null;
+
+                    try {
+                        StartDate = formatter.parse(startDateStr); 
+                        EndDate = formatter.parse(endDateStr);
+
+                        ArrayList<DishStat> dishListStat = dishStatDAO.getDishRevenueStatisticsByDate(StartDate, EndDate);
+                        float totalRevenue = 0;
+                        for(int i =0; i < dishListStat.size(); i++){
+                            totalRevenue += dishListStat.get(i).getTotal();
+                        }
+
+                        request.setAttribute("totalRevenue", totalRevenue);
+                        request.setAttribute("listDishStat", dishListStat);
+
+
+                    } catch (ParseException e) {
+                        System.err.println("Lỗi định dạng ngày tháng: " + e.getMessage());
+                    }
                     dispatcher = request.getRequestDispatcher("/View/Manager/DishRevenueStatisticsView.jsp");
                     dispatcher.forward(request, response);
                     break;
@@ -57,37 +82,5 @@ public class DishStatServlet extends HttpServlet {
         } catch (Exception ex) {
             throw new ServletException(ex);
         }
-    }
-    
-    private void getRevenueStat(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        String startDateStr = request.getParameter("startDate");
-        String endDateStr = request.getParameter("endDate");
-        
-        System.out.println(startDateStr + " " + endDateStr);
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date StartDate = null;
-        Date EndDate = null;
-        
-        try {
-            StartDate = formatter.parse(startDateStr); 
-            EndDate = formatter.parse(endDateStr);
-
-            ArrayList<DishStat> dishListStat = dishStatDAO.getDishRevenueStatisticsByDate(StartDate, EndDate);
-            float totalRevenue = 0;
-            for(int i =0; i < dishListStat.size(); i++){
-                totalRevenue += dishListStat.get(i).getTotal();
-            }
-            
-            request.setAttribute("totalRevenue", totalRevenue);
-            request.setAttribute("listDishStat", dishListStat);
-
-
-        } catch (ParseException e) {
-            System.err.println("Lỗi định dạng ngày tháng: " + e.getMessage());
-        }
-        
     }
 }

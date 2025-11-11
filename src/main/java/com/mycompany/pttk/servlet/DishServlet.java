@@ -49,18 +49,46 @@ public class DishServlet extends HttpServlet {
         try {
             switch (action) {
                 case "detail":
-                    getDishById(request, response);
+                    int dishId = Integer.parseInt(request.getParameter("id"));
+                    Dish dish = dishDAO.getDishById(dishId);
+                    request.setAttribute("dish", dish); 
                     dispatcher = request.getRequestDispatcher("/View/Customer/DishDetailView.jsp");
                     dispatcher.forward(request, response);
                     break;
                 case "search":
-                    getListDishByName(request, response);  
+                    String keyword = request.getParameter("keyword");
+                    ArrayList<Dish> dishList = dishDAO.getListDishByName(keyword); 
+
+                    System.out.println("Keyword: " + keyword);
+                    request.setAttribute("listDish", dishList);
                     dispatcher = request.getRequestDispatcher("/View/Customer/SearchView.jsp");
                     dispatcher.forward(request, response);
                     break;
                 case "managerDetail":
-                    getDishById(request, response);
-                    getOrderHistory(request, response);
+                    dishId = Integer.parseInt(request.getParameter("id"));
+                    dish = dishDAO.getDishById(dishId);
+                    request.setAttribute("dish", dish); 
+                    
+                    dishId = Integer.parseInt(request.getParameter("id"));
+                    String startDateStr = request.getParameter("startDate");
+                    String endDateStr = request.getParameter("endDate");
+
+                    System.out.println(startDateStr + " " + endDateStr);
+
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    Date StartDate = null;
+                    Date EndDate = null;
+
+                    try {
+                        StartDate = formatter.parse(startDateStr); 
+                        EndDate = formatter.parse(endDateStr);
+                        ArrayList<OrderedDish> orderHistory = new ArrayList<>();
+                        orderHistory = orderedDishDAO.getDishOrderHistoryByDateAndId(StartDate, EndDate, dishId);
+                        request.setAttribute("orderHistory", orderHistory);
+                    } catch (ParseException e) {
+                        System.err.println("Lỗi định dạng ngày tháng: " + e.getMessage());
+                    }
+                    
                     dispatcher = request.getRequestDispatcher("/View/Manager/ManagerDishDetailView.jsp");
                     dispatcher.forward(request, response);
                     break;
@@ -68,48 +96,5 @@ public class DishServlet extends HttpServlet {
         } catch (Exception ex) {
             throw new ServletException(ex);
         }
-    }
-    
-    private void getDishById(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        int dishId = Integer.parseInt(request.getParameter("id"));
-        Dish dish = dishDAO.getDishById(dishId);
-        
-        request.setAttribute("dish", dish); 
-        
-    }
-    
-    private void getListDishByName(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        String keyword = request.getParameter("keyword");
-        ArrayList<Dish> dishList = dishDAO.getListDishByName(keyword); 
-        
-        System.out.println("Keyword: " + keyword);
-        request.setAttribute("listDish", dishList);
-    }
-    
-    private void getOrderHistory(HttpServletRequest request, HttpServletResponse response){
-        int dishId = Integer.parseInt(request.getParameter("id"));
-        String startDateStr = request.getParameter("startDate");
-        String endDateStr = request.getParameter("endDate");
-        
-        System.out.println(startDateStr + " " + endDateStr);
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date StartDate = null;
-        Date EndDate = null;
-        
-        try {
-            StartDate = formatter.parse(startDateStr); 
-            EndDate = formatter.parse(endDateStr);
-            ArrayList<OrderedDish> orderHistory = new ArrayList<>();
-            orderHistory = orderedDishDAO.getDishOrderHistoryByDateAndId(StartDate, EndDate, dishId);
-            request.setAttribute("orderHistory", orderHistory);
-        } catch (ParseException e) {
-            System.err.println("Lỗi định dạng ngày tháng: " + e.getMessage());
-        }
-        
     }
 }

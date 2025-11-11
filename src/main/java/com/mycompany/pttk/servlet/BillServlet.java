@@ -43,7 +43,8 @@ public class BillServlet extends HttpServlet {
         try {
             switch (action) {
                 case "detail":
-                    getBill(request, response);
+                    int orderedDishId = Integer.parseInt(request.getParameter("orderId"));    
+                    request.setAttribute("bill", billDAO.getBillById(orderedDishId));
                     dispatcher = request.getRequestDispatcher("/View/Manager/BillView.jsp");
                     dispatcher.forward(request, response);
                     break;
@@ -51,10 +52,5 @@ public class BillServlet extends HttpServlet {
         } catch (Exception ex) {
             throw new ServletException(ex);
         }
-    }
-    
-    private void getBill(HttpServletRequest request, HttpServletResponse response){
-        int orderedDishId = Integer.parseInt(request.getParameter("orderId"));    
-        request.setAttribute("bill", billDAO.getBillById(orderedDishId));
     }
 }
