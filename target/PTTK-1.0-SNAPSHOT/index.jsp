@@ -42,10 +42,10 @@
 </head>
 <body>
  <div class="login-container">
-    <a href="${pageContext.request.contextPath}/View/Manager/StatisticsSelectionView.jsp">
+    <a href="${pageContext.request.contextPath}/View/Customer/CustomerHomeView.jsp">
         <button>Khách hàng</button>
     </a>
-    <a href="${pageContext.request.contextPath}/View/Manager/StatisticsSelectionView.jsp">
+    <a href="${pageContext.request.contextPath}/View/Manager/ManagerHomeView.jsp">
         <button>Quản lý</button>
     </a>
  </div>
