@@ -12,7 +12,6 @@ com\mycompany\pttk\model\Customer.class
 com\mycompany\pttk\model\Table.class
 com\mycompany\pttk\DAO\OrderedDishDAO.class
 com\mycompany\pttk\model\WarehouseStaff.class
-com\mycompany\pttk\DAO\LoginDAO.class
 com\mycompany\pttk\DAO\DishDAO.class
 com\mycompany\pttk\model\Staff.class
 com\mycompany\pttk\model\ComboDish.class
@@ -25,8 +24,8 @@ com\mycompany\pttk\model\Ingredient.class
 com\mycompany\pttk\model\OrderedCombo.class
 com\mycompany\pttk\model\OrderedDish.class
 com\mycompany\pttk\model\SalesStaff.class
+com\mycompany\pttk\model\x.class
 com\mycompany\pttk\model\IngredientImport.class
 com\mycompany\pttk\servlet\DishStatServlet.class
 com\mycompany\pttk\model\IngredientStat.class
-com\mycompany\pttk\servlet\LoginServlet.class
 com\mycompany\pttk\servlet\DishServlet.class

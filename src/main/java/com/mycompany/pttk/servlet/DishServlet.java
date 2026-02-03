@@ -18,6 +18,7 @@ import com.mycompany.pttk.model.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 /**
  *
  * @author viet5
@@ -74,6 +75,7 @@ public class DishServlet extends HttpServlet {
                     String endDateStr = request.getParameter("endDate");
 
                     System.out.println(startDateStr + " " + endDateStr);
+                    BillDAO billDAO = new BillDAO();
 
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                     Date StartDate = null;
@@ -84,6 +86,26 @@ public class DishServlet extends HttpServlet {
                         EndDate = formatter.parse(endDateStr);
                         ArrayList<OrderedDish> orderHistory = new ArrayList<>();
                         orderHistory = orderedDishDAO.getDishOrderHistoryByDateAndId(StartDate, EndDate, dishId);
+                        
+                        ArrayList<x> customerHistory = new ArrayList<>();
+                        HashMap<String, Integer> m = new HashMap<String, Integer>();
+                        HashMap<String, Integer> m2 = new HashMap<String, Integer>();
+                        
+                        for(int i = 0; i < orderHistory.size(); i++){
+                            Bill b = billDAO.getBillById(orderHistory.get(i).getId());
+                            if(m.containsKey(b.getCustomer().getName())){
+                               m.put(b.getCustomer().getName(), m.get(b.getCustomer().getName()) + 1);
+                               m2.put(b.getCustomer().getName(), m2.get(b.getCustomer().getName()) + orderHistory.get(i).getQuantity());
+                            } else {
+                               m.put(b.getCustomer().getName(), 1);
+                               m2.put(b.getCustomer().getName(), orderHistory.get(i).getQuantity());
+                            }
+                        }
+                        
+                        for(String a : m.keySet()){
+                            customerHistory.add(new x(a, m.get(a), (int)dish.getPrice() * m2.get(a)));
+                        }
+                        request.setAttribute("customerHistory", customerHistory);
                         request.setAttribute("orderHistory", orderHistory);
                     } catch (ParseException e) {
                         System.err.println("Lỗi định dạng ngày tháng: " + e.getMessage());

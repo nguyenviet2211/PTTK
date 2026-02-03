@@ -191,6 +191,32 @@
                         </tr>
                     </tbody>
                 </table>
+                            <div/>
+                            <div/>
+                            
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="text-align:left">Khách hàng</th>
+                            <th>Số lần ăn</th>
+                            <th style="text-align:right">Thành tiền</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <c:forEach var="customer" items="${customerHistory}">
+                            <tr>
+                                <td  style="text-align:left"> ${customer.name}</td>
+
+                                <td>${customer.count}</td>
+
+                                <td  style="text-align:right">
+                                    <fmt:formatNumber value="${customer.total}"/>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
             </c:if>
         </div>
     </body>
